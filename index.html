@@ -2,49 +2,53 @@
 <head>
     <title>Pacman</title>
     <style type = "text/css">
-
-body{
-    background-color: black;
-    margin: 0px;
-}
-div.row div{
-    width: 20px;
-    height: 20px;
-
-    display: inline-block;
-}
-
-
-
-div.brick{
-    background-color: blue;
-}
-div.coin{
-    background: url('coin.gif');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-div.empty{
-
-}
-div#pacman{
-    background: url('pacman.gif');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-}
-
-        </style>
+        body{
+            background-color: black;
+            margin: 0px;
+        }
+        div.row div{
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+        div.brick{
+            background-color: blue;
+        }
+        div.coin{
+            background: url('coin.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        div.empty{
+        }
+        div#pacman{
+            background: url('pacman.gif');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+        }
+        div#score{
+            border: 1px solid white;
+            width: 30px;
+            height: 20px;
+            color: white;
+            padding: 7px;
+            text-align: center;
+            position: absolute;
+            top: 10px;
+            left: 210px;
+        }
+    </style>
 </head>
 <body>
 
     <div id = 'container'>
         <div id = 'world'></div>
         <div id = 'pacman'></div>
-        <div id = 'score'></div>
+        <div id = 'score'>100</div>
     </div>
 
 <script>
@@ -60,9 +64,11 @@ div#pacman{
         [2,2,2,2,2,2,2,2,2,2]
     ];
 
+    var score = 0;
+
     var pacman = {
-        x: 0,
-        y:0
+        x: 1,
+        y:1
     };
 
     function displayWorld(){
@@ -87,26 +93,33 @@ div#pacman{
         document.getElementById('pacman').style.left = pacman.x*20+"px";
     }
 
+    function displayScore(){
+        document.getElementById('score').innerHTML = score;
+    }
+
     displayWorld();
     displayPacman();
+    displayScore();
 
     document.onkeydown = function(e){
-        if(e.keyCode == 37){
-            pacman.x --;
+        if(e.keyCode == 37 && world[pacman.y][pacman.x-1] != 2){ //move left
+            pacman.x--;
         }
-        else if (e.keyCode == 39){
+        else if (e.keyCode == 39 && world[pacman.y][pacman.x+1] != 2){ //move right
             pacman.x++;
         }
-        else if (e.keyCode == 38){
+        else if (e.keyCode == 38 && world[pacman.y-1][pacman.x] != 2){
             pacman.y--;
         }
-        else if (e.keyCode == 40){
+        else if (e.keyCode == 40 && world[pacman.y+1][pacman.x] != 2){
             pacman.y++;
         }
         
         if(world[pacman.y][pacman.x] == 1){
             world[pacman.y][pacman.x] = 0;
+            score+=10;
             displayWorld();
+            displayScore();
         }
         displayPacman();
     }
